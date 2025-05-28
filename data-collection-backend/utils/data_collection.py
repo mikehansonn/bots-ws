@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 # Server configuration
 SERVER_IP = "192.168.86.100"  # Replace with your actual server IP
-PORT = 8000
+PORT = 9000
 BASE_URL = f"http://{SERVER_IP}:{PORT}"
 
 # Automatically determine the robot ID
