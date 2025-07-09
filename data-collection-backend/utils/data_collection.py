@@ -30,7 +30,7 @@ ALERT_LEVEL_FILE = f"/home/{robot_id}/robot/swarm/alert_level.txt"
 ROBOT_HEARTBEAT_FILE = f"/home/{robot_id}/robot/realtime/{robot_id}_heartbeat_broadcast.txt"
 
 def epoch_to_utc(timestamp):
-    return datetime.datetime.fromtimestamp(timestamp, datetime.UTC)
+    return str(datetime.datetime.fromtimestamp(timestamp, datetime.UTC))
 
 def read_alert_level():
     try:
@@ -98,7 +98,7 @@ async def read_sensor_data():
 
                         if len(compass_data) == 4:
                             payload["compass_angle"] = float(compass_data[0])
-                            payload["compass_timestamp"] = epoch_to_utc(int(compass_data[1]))
+                            payload["compass_timestamp"] = epoch_to_utc(float(compass_data[1]))
                             payload["compass_drdy_error_flag"] = int(compass_data[2])
                             payload["compass_slow_read_flag"] = int(compass_data[3])
                 except Exception as e:
@@ -115,7 +115,7 @@ async def read_sensor_data():
                         if len(gps_data) >= 8:
                             payload["gps_now_x"] = float(gps_data[0])
                             payload["gps_now_y"] = float(gps_data[1])
-                            payload["gps_timestamp"] = epoch_to_utc(int(gps_data[2]))
+                            payload["gps_timestamp"] = epoch_to_utc(float(gps_data[2]))
                             payload["gps_avg_read_time"] = float(gps_data[3])
                             payload["gps_max_read_time"] = float(gps_data[4])
                             payload["gps_hacc"] = float(gps_data[5])
@@ -139,7 +139,7 @@ async def read_sensor_data():
                         heartbeat_data = content.split(',')
 
                         if len(heartbeat_data) == 3:
-                            payload['heartbeat_timestamp'] = epoch_to_utc(int(heartbeat_data[0]))  # timestamp as string
+                            payload['heartbeat_timestamp'] = epoch_to_utc(float(heartbeat_data[0]))  # timestamp as string
                             payload['heartbeat_period'] = int(float(heartbeat_data[1]))  # period as int
                             payload['heartbeat_delta'] = int(float(heartbeat_data[2]))  # delta as int
                 except Exception as e:
