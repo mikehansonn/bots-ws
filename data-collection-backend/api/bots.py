@@ -6,9 +6,6 @@ from datetime import datetime
 
 router = APIRouter()
 
-# GET ENDPOINTS
-# ====================================================================================
-
 class BotGet(BaseModel):
     mac: str
 
@@ -25,15 +22,6 @@ def get_bot(details: BotGet):
         )
     
     return response.data[0]
-
-
-# ====================================================================================
-# END GET ENDPOINTS
-
-
-
-# POST ENDPOINTS
-# ====================================================================================
 
 class BotUpdate(BaseModel):
     mac: str
@@ -71,6 +59,7 @@ class BotUpdate(BaseModel):
 @router.post("/bot/update")
 def update_bot(bot_data: BotUpdate):
     db = get_database()
+    print(bot_data)
     
     # Check if bot exists (don't use .single() to avoid error on 0 rows)
     existing_bot = db.table("bots").select("*").eq("mac", bot_data.mac).execute()
@@ -111,7 +100,3 @@ def update_bot(bot_data: BotUpdate):
         )
     
     return response.data[0]
-
-
-# ====================================================================================
-# END POST ENDPOINTS
