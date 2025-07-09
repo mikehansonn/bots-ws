@@ -59,7 +59,6 @@ class BotUpdate(BaseModel):
 @router.post("/bot/update")
 def update_bot(bot_data: BotUpdate):
     db = get_database()
-    print(bot_data)
     
     # Check if bot exists (don't use .single() to avoid error on 0 rows)
     existing_bot = db.table("bots").select("*").eq("mac", bot_data.mac).execute()
