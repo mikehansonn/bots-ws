@@ -75,7 +75,7 @@ def update_bot(bot_data: BotUpdate):
     
     # Handle historical_positions if GPS coordinates are provided
     if bot_data.gps_now_x is not None and bot_data.gps_now_y is not None:
-        new_position = [bot_data.gps_now_x, bot_data.gps_now_y]
+        new_position = [float(bot_data.gps_now_x), float(bot_data.gps_now_y)]
         
         # Get existing historical_positions or initialize empty list
         existing_positions = []
