@@ -4,7 +4,7 @@ import os
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
-from api import users
+from api import users, bots
 
 # Run application with
 # uvicorn main:app --reload
@@ -30,6 +30,7 @@ async def root():
     return {"message": "Active"}
 
 app.include_router(users.router, tags=["users"])
+app.include_router(bots.router, tags=["bots"])
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from utils.db import get_database
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 router = APIRouter()
@@ -72,6 +72,24 @@ def update_bot(bot_data: BotUpdate):
             insert_data[field] = value
             if field != "mac":  # Don't include mac in update data
                 update_data[field] = value
+    
+    # Handle historical_positions if GPS coordinates are provided
+    if bot_data.gps_now_x is not None and bot_data.gps_now_y is not None:
+        new_position = [bot_data.gps_now_x, bot_data.gps_now_y]
+        
+        # Get existing historical_positions or initialize empty list
+        existing_positions = []
+        if existing_bot.data and len(existing_bot.data) > 0:
+            existing_positions = existing_bot.data[0].get("historical_positions", [])
+        
+        # Add new position and keep only last 50
+        existing_positions.append(new_position)
+        if len(existing_positions) > 50:
+            existing_positions = existing_positions[-50:]  # Keep last 50
+        
+        # Add to both insert and update data
+        insert_data["historical_positions"] = existing_positions
+        update_data["historical_positions"] = existing_positions
     
     # If bot doesn't exist, create it
     if not existing_bot.data or len(existing_bot.data) == 0:
